@@ -1,8 +1,19 @@
+import axios from "axios";
+
 export default function AuthPage({ onAuth }) {
     
     function onSubmit(e) {
         e.preventDefault();
         const { value } = e.target[0];
+
+        const promise = axios.post(
+            `${process.env.BACKEND_BASE_URL}/authenticate`,
+            {username: value}
+        );
+
+        promise
+            .then((r) => onAuth({...r.data, secret: value}))
+            .catch((e) => console.log(e));
         onAuth({ username: value, secret: value });
     };
     
