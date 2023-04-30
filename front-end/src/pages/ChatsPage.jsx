@@ -4,7 +4,7 @@ export default function ChatsPage({ user }) {
     
     return(
         <PrettyChatWindow
-        projectId={process.env.PROJECT_ID}
+        projectId={"f8f71cbd-27ac-45fa-8a6e-bc988ddd9b89"}
         username={user.username}
         secret={user.secret}
         style={{ height: '100vh' }}

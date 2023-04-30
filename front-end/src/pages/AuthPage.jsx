@@ -1,20 +1,28 @@
 import axios from "axios";
+import { useState } from "react";
 
 export default function AuthPage({ onAuth }) {
-    
+    const [value, setValue] = useState('');
+    const [display, setDisplay] = useState(false);
+
     function onSubmit(e) {
         e.preventDefault();
-        const { value } = e.target[0];
+        if (value === '') return alert("Por favor preencha o campo");
+        setDisplay(true);
 
         const promise = axios.post(
-            `${process.env.BACKEND_BASE_URL}/authenticate`,
+            "http://localhost:5000/authenticate",
             {username: value}
         );
-
         promise
-            .then((r) => onAuth({...r.data, secret: value}))
+            .then((r) => 
+            {
+                onAuth({...r.data, secret: value});
+            })
             .catch((e) => console.log(e));
+        
         onAuth({ username: value, secret: value });
+        setDisplay(false);
     };
     
     return (
@@ -26,8 +34,13 @@ export default function AuthPage({ onAuth }) {
 
             <div className="auth">
                 <div className="auth-label">Usuário</div>
-                <input className="auth-input" name="username" />
-                <button className="auth-button" type="submit">
+                <input 
+                    className="auth-input" 
+                    name="username" 
+                    type="text"
+                    value={value} 
+                    onChange={e => setValue(e.target.value)}/>
+                <button className="auth-button" type="submit" disabled={display}>
                     Entrar
                 </button>
             </div>
